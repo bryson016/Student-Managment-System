@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="form-card fade-in">
+        <h2><i class="fas fa-user-plus"></i> Add New Student</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Name</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" name="email" class="form-control" placeholder="student@example.com" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Add Student</button>
+        </form>
+        <div class="text-center mt-4">
+            <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

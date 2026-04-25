@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Management System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+    <nav>
+        <div>
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <a href="/add"><i class="fas fa-user-plus"></i> Add Student</a>
+            {% if session.username %}
+            <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="/courses"><i class="fas fa-book"></i> Courses</a>
+                <span>Welcome, {{ session.username }}! (<small>{{ session.role }}</small>)</span>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% endif %}
+        </div>
+        <a href="/login" class="login-link" style="font-weight: bold;"><i class="fas fa-user"></i> {{ 'Account' if session.username else 'Login' }}</a>
+    </nav>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

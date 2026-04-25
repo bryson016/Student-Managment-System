@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - Student Management System{% endblock %}
+
+{% block content %}
+<div class="section-header text-center mb-5">
+    <h2><i class="fas fa-book"></i> Courses</h2>
+    <p>Available courses for enrollment</p>
+</div>
+
+{% if session.role in ['teacher', 'admin'] %}
+<div class="add-course-section mb-5">
+    <div class="form-card">
+        <h3><i class="fas fa-plus"></i> Add New Course</h3>
+        <form method="POST" action="/courses">
+            <div class="form-group">
+                <label>Course Name</label>
+                <input type="text" name="name" placeholder="e.g. Software Engineering 101" required class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Course</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<form method="POST" action="/enroll-multiple">
+<div class="courses-grid">
+    {% for course, is_enrolled in courses %}
+    <div class="course-card {% if is_enrolled %}enrolled{% endif %}">
+        <i class="fas fa-laptop-code course-icon"></i>
+        <h4>{{ course[1] }}</h4>
+        <p>Course ID: {{ course[0] }}</p>
+        {% if course[2] %}
+            <p>Teacher: ID {{ course[2] }}</p>
+        {% endif %}
+        {% if session.user_id %}
+            {% if is_enrolled %}
+                <span class="btn btn-success btn-sm enrolled"><i class="fas fa-check"></i> Enrolled</span>
+            {% else %}
+                <label class="course-select-label">
+                    <input type="checkbox" name="course_ids" value="{{ course[0] }}"> Select to Enroll
+                </label>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+{% if session.user_id and courses %}
+<div class="text-center mt-4 mb-5">
+    <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Enroll Selected Courses</button>
+</div>
+{% endif %}
+</form>
+
+{% if not courses %}
+<div class="empty-state text-center py-5">
+    <i class="fas fa-book-open fa-3x mb-3" style="color: #dee2e6;"></i>
+    <h3>No courses yet</h3>
+    <p>Teachers can add courses.</p>
+</div>
+{% endif %}
+
+<style>
+.add-course-section { max-width: 500px; margin: 0 auto; }
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+.course-card {
+    background: rgba(255,255,255,0.95);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+.course-card:hover { transform: translateY(-5px); }
+.course-card.enrolled { opacity: 0.85; background: #f0fff4; }
+.course-icon { font-size: 3rem; color: var(--secondary-green); margin-bottom: 1rem; }
+.course-card h4 { color: var(--primary-green); }
+.btn.enrolled { opacity: 0.7; cursor: not-allowed; }
+.course-select-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--primary-green);
+    margin-top: 0.5rem;
+}
+.course-select-label input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+</style>
+{% endblock %}

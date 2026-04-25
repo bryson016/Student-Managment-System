@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Student Management{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <!-- Quick Stats -->
+    <div class="stats-row mb-5">
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <h3>{{ students|length }}</h3>
+            <p>Total Students</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-book"></i>
+            <h3>{{ enrolled_courses|length }}</h3>
+            <p>My Courses</p>
+        </div>
+    </div>
+
+    <!-- Role-based Content -->
+    {% if role == 'student' %}
+    <section class="courses-section mb-5">
+        <h3><i class="fas fa-book-open"></i> My Enrolled Courses</h3>
+        {% if enrolled_courses %}
+        <div class="student-grid">
+            {% for course in enrolled_courses %}
+            <div class="course-card enrolled">
+                <i class="fas fa-laptop-code"></i>
+                <h4>{{ course[1] }}</h4>
+                <p>Grade: {{ course[3] or 'Pending' }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-book-open fa-3x"></i>
+            <p>No courses enrolled. <a href="/courses">Browse courses</a></p>
+        </div>
+        {% endif %}
+    </section>
+    {% elif role in ['teacher', 'admin'] %}
+    <section class="manage-section mb-5">
+        <h3><i class="fas fa-cog"></i> Manage</h3>
+        <div class="action-buttons">
+            <a href="/courses" class="btn btn-success"><i class="fas fa-book"></i> Manage Courses</a>
+            <a href="/add" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add Student</a>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Students List -->
+    <section>
+        <div class="section-header">
+            <h3><i class="fas fa-list"></i> Students Directory</h3>
+        </div>
+        <div class="student-list">
+            {% for student in students %}
+            <div class="student-item">
+                <div>
+                    <strong>{{ student[1] }}</strong>
+                    <br><small>{{ student[2] }}</small>
+                </div>
+                <a href="/delete/{{ student[0] }}" class="delete-btn" onclick="return confirm('Delete {{ student[1] }}?')">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not students %}
+        <div class="empty-state">
+            <i class="fas fa-users-slash fa-3x"></i>
+            <p>No students. <a href="/add">Add first student</a></p>
+        </div>
+        {% endif %}
+    </section>
+</div>
+
+<style>
+.dashboard-grid { max-width: 1200px; margin: 0 auto; }
+.stats-row { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+.action-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+.section-header h3 { color: var(--primary-green); }
+.student-list { max-height: 500px; overflow-y: auto; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Simple confirm for delete
+});
+</script>
+{% endblock %}

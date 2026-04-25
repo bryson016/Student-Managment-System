@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Student Management System - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section mb-4 text-center fade-in">
+    <div class="hero-content">
+        <h1><i class="fas fa-graduation-cap"></i> Student Management System</h1>
+        <p class="lead mb-4">Modern platform for managing students, courses, and academic records with role-based access.</p>
+        <div class="hero-buttons">
+            <a href="/register" class="btn btn-primary btn-lg me-3"><i class="fas fa-user-plus"></i> Get Started</a>
+            <a href="/login" class="btn btn-outline-secondary btn-lg"><i class="fas fa-sign-in-alt"></i> Login</a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Cards (Demo - connect to real data later) -->
+<section class="stats-section mb-5">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="fas fa-users stat-icon"></i>
+                <h3>{{ students|length }}</h3>
+                <p>Total Students</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="fas fa-user-graduate stat-icon"></i>
+                <h3>3</h3>
+                <p>Student Roles</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="fas fa-chalkboard-teacher stat-icon"></i>
+                <h3>{{ courses|length }}</h3>
+                <p>Courses</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="stat-card">
+                <i class="fas fa-chart-line stat-icon"></i>
+                <h3>Coming Soon</h3>
+                <p>Analytics</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Students -->
+<section class="students-section">
+    <div class="section-header text-center mb-5">
+        <h2>Recent Students</h2>
+        <p>Browse your student directory</p>
+    </div>
+    {% if students %}
+    <div class="student-grid">
+        {% for student in students[:6] %}
+        <div class="student-card fade-in">
+            <div class="student-avatar">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h4>{{ student[1] }}</h4>
+            <p class="student-email">{{ student[2] }}</p>
+            {% if session.username %}
+            <a href="/delete/{{ student[0] }}" class="delete-btn btn-sm">Delete</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% if students|length > 6 %}
+    <div class="text-center mt-4">
+        <a href="/dashboard" class="btn btn-primary">View All Students</a>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state text-center py-5">
+        <i class="fas fa-users-slash fa-3x mb-3" style="color: #dee2e6;"></i>
+        <h3>No students yet</h3>
+        <p>Login or register to start managing students.</p>
+        <a href="/register" class="btn btn-primary">Get Started</a>
+    </div>
+    {% endif %}
+</section>
+
+<style>
+.hero-section {
+    background: rgba(255,255,255,0.95);
+    padding: 4rem 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+.hero-content { max-width: 800px; margin: 0 auto; }
+.hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.lead { font-size: 1.25rem; color: var(--dark-text); opacity: 0.9; }
+
+.stats-section .row { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+.stat-card {
+    background: rgba(255,255,255,0.95);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    flex: 1;
+    min-width: 200px;
+}
+.stat-card:hover { transform: translateY(-10px); }
+.stat-icon { font-size: 3rem; color: var(--primary-green); margin-bottom: 1rem; }
+.stat-card h3 { font-size: 2.5rem; font-weight: 700; color: var(--primary-green); margin-bottom: 0.5rem; }
+.stat-card p { color: var(--dark-text); opacity: 0.8; }
+
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+.student-card {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+.student-card:hover { transform: translateY(-5px); }
+.student-avatar { font-size: 4rem; color: var(--primary-green); margin-bottom: 1rem; }
+.student-email { color: #6c757d; margin-bottom: 1rem; font-size: 0.95rem; }
+
+@media (max-width: 768px) {
+    .hero-buttons { flex-direction: column; align-items: center; }
+    .stats-section .row { flex-direction: column; }
+}
+</style>
+
+{% endblock %}

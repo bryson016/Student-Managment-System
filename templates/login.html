@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Student Management System{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="form-card fade-in">
+        <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }}
+                <i class="fas fa-user input-icon"></i>
+                {{ form.username(class="form-control", placeholder="Username") }}
+                {% for error in form.username.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                <i class="fas fa-lock input-icon"></i>
+                {{ form.password(class="form-control", placeholder="Password") }}
+                {% for error in form.password.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+
+            {{ form.submit(class="btn btn-primary btn-lg") }}
+        </form>
+        <div class="text-center mt-4">
+            <p>No account? <a href="{{ url_for('register') }}">Create one here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
